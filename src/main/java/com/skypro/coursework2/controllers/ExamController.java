@@ -1,11 +1,10 @@
 package com.skypro.coursework2.controllers;
 
 import com.skypro.coursework2.entities.Question;
+import com.skypro.coursework2.exceptions.QuestionAmountException;
 import com.skypro.coursework2.servicies.ExaminerService;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.Collection;
 
@@ -13,7 +12,11 @@ import java.util.Collection;
 @RequestMapping("/exam/get")
 public class ExamController {
 
-    //todo обработчик для QuestionAmountException
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    @ExceptionHandler({QuestionAmountException.class})
+    public String handleException(RuntimeException e){
+        return String.format("%s %s", HttpStatus.BAD_REQUEST.value(), e.getMessage());
+    }
 
     private final ExaminerService examinerService;
 
